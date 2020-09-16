@@ -16,10 +16,20 @@ class MyApp extends StatelessWidget {
       title: "navigator",
       routes: {
         AppRoutes.home: (context) => HomeScreen(),
-        AppRoutes.show: (context) => ShowScreen(),
+        //AppRoutes.show: (context) => ShowScreen(),
         AppRoutes.edit: (context) => EditScreen()
-        
       },
+      onGenerateRoute: _registerRWP,
     );
   }
+
+  Route _registerRWP(RouteSettings settings){
+    if(settings.name == AppRoutes.show){
+      return MaterialPageRoute(builder: (context){
+        ShowParameter param = settings.arguments;
+        return ShowScreen(name: param.name, score: param.score);
+      });
+    }
+  }
+
 }
