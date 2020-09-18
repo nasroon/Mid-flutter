@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 class EditScreen extends StatefulWidget {
   EditScreen({Key key, this.title}) : super(key: key);
   final String title;
-
   @override
   _EditScreenState createState() => _EditScreenState();
 }
 
 class _EditScreenState extends State<EditScreen> {
   String answer;
-  TextEditingController controller = TextEditingController();
+  bool _validate = false;
+  TextEditingController controller;
   @override
   void initState() {
+    controller = TextEditingController();
     answer = "0";
     super.initState();
   }
@@ -45,7 +46,11 @@ class _EditScreenState extends State<EditScreen> {
               style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
           TextField(
             controller: controller,
-          )
+            decoration: InputDecoration(
+              labelText: 'Enter the Value',
+              errorText: _validate ? 'Value Can\'t Be Empty' : null,
+            ),
+          ),
         ],
       ),
     );
@@ -115,54 +120,51 @@ class _EditScreenState extends State<EditScreen> {
                 addNumberToAnswer(0);
               }),
               buildNumberButton("OK", onTap: () {
-                confirmNumber();
+                setState(() {
+                  controller.text.isEmpty
+                      ? _validate = true
+                      : _validate = false;
+                });
+                _validate ? errorMessage() : confirmNumber();
               }),
             ]),
           ],
         ));
   }
 
-  void confirmNumber() {
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed: () => Navigator.pop(context, "Back"),
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Continue"),
-      onPressed: () {},
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Notification"),
-      content: new RichText(
-        text: TextSpan(
-        style: TextStyle(color: Colors.black),
-        children: <TextSpan>[
-          TextSpan(text: 'Are you sure to add new List?\n'),
-          TextSpan(text: '\nName: ', style: TextStyle(fontWeight: FontWeight.bold)),
-          TextSpan(text: '${controller.text}'),
-          TextSpan(text: '\nScore: ', style: TextStyle(fontWeight: FontWeight.bold)),
-          TextSpan(text: '$answer'),
-        ],
-      ),
-      ),
+  void errorMessage() {
+    AlertDialog alerterror = AlertDialog(
+      title: Text('Error !!'),
+      content: const Text("Name can't empty"),
       actions: [
-        cancelButton,
-        continueButton,
+        FlatButton(
+          child: Text('Ok'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ],
     );
 
-    // show the dialog
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        return alerterror;
       },
     );
   }
 
+
+  void confirmNumber() {
+    _sendDataBack(context);
+  }
+
+  void _sendDataBack(BuildContext context) {
+    Navigator.pop(context, '${controller.text}-$answer');
+  }
+
   void clearAnswer() {
+    controller.clear();
     setState(() {
       answer = "0";
     });

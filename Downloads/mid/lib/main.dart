@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
     if(settings.name == AppRoutes.show){
       return MaterialPageRoute(builder: (context){
         ShowParameter param = settings.arguments;
-        return ShowScreen(name: param.name, score: param.score);
+        return ShowScreen(name: param.name, score: param.score, id: param.id);
       });
     }
   }
