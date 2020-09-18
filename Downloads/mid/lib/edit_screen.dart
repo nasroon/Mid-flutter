@@ -39,27 +39,30 @@ class _EditScreenState extends State<EditScreen> {
 
   Widget buildName() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        children: <Widget>[
-          Text("Name",
-              style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
-          TextField(
-            controller: controller,
-            decoration: InputDecoration(
-              labelText: 'Enter the Value',
-              errorText: _validate ? 'Value Can\'t Be Empty' : null,
-            ),
-          ),
-        ],
-      ),
-    );
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text("Name",
+                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
+            Container(
+              width: 220,
+              child: TextField(
+                controller: controller,
+                decoration: InputDecoration(
+                  labelText: 'Enter the Value',
+                  errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                ),
+              ),
+            )
+          ],
+        ));
   }
 
   Widget buildAnswerWidget() {
     return Expanded(
         child: Container(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(8),
             color: Color(0xffdbdbdb),
             child: Align(
                 alignment: Alignment.bottomCenter,
@@ -153,7 +156,6 @@ class _EditScreenState extends State<EditScreen> {
       },
     );
   }
-
 
   void confirmNumber() {
     _sendDataBack(context);

@@ -72,11 +72,8 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
         onTap: () => {
-              Navigator.of(context).pushNamed(AppRoutes.show,
-                  arguments: ShowParameter(
-                      student[index].name,
-                      student[index].score.toString(),
-                      student[index].id.toString()))
+              Navigator.of(context)
+                  .pushNamed(AppRoutes.show, arguments: ShowParameter(student,student[index]))
             });
   }
 }
