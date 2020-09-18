@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mid/student_data.dart';
 
-
 class ShowParameter {
   final List<StudentData> student;
   final StudentData std;
-  const ShowParameter(this.student,this.std);
+  const ShowParameter(this.student, this.std);
 }
 
 class ShowScreen extends StatefulWidget {
   final List<StudentData> student;
   final StudentData std;
-  ShowScreen({this.student,this.std});
+  ShowScreen({this.student, this.std});
 
   @override
   _ShowScreenState createState() => _ShowScreenState();
@@ -38,13 +37,22 @@ class _ShowScreenState extends State<ShowScreen> {
             ),
             Container(
                 child: Column(children: [
-              Text("Next Person >",
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
+              InkWell(
+                child: Text("Next Person >",
+                    style:
+                        TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
+                onTap: () {
+                  findNextPerson(findNextPerson(widget.std, widget.student),
+                      widget.student);
+                  setState(() {});
+                },
+              ),
               ListTile(
-                leading: Text(findNextPerson(widget.std,widget.student).id.toString()), /////////////////
-                title: Text(findNextPerson(widget.std,widget.student).name),            /////////////////
+                leading: Text(
+                    findNextPerson(widget.std, widget.student).id.toString()),
+                title: Text(findNextPerson(widget.std, widget.student).name),
                 trailing: Text(
-                  findNextPerson(widget.std,widget.student).score.toString(),           /////////////////
+                  findNextPerson(widget.std, widget.student).score.toString(),
                   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -53,13 +61,13 @@ class _ShowScreenState extends State<ShowScreen> {
     );
   }
 
-  StudentData findNextPerson(StudentData std,List<StudentData> stdlist){
+  StudentData findNextPerson(StudentData std, List<StudentData> stdlist) {
     List<StudentData> stdlistsort;
     stdlistsort = List.from(stdlist);
-    stdlistsort.sort((a,b) => a.score.compareTo(b.score));
-    for(int i = 0;i<stdlistsort.length;i++){
-      if(std.score < stdlistsort[i].score)
-        return stdlistsort[i];
+    stdlistsort.sort((a, b) => a.score.compareTo(b.score));
+    for (int i = 0; i < stdlistsort.length; i++) {
+      if (std.score < stdlistsort[i].score) return stdlistsort[i];
     }
+    return std;
   }
 }
