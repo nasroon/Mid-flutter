@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mid/student_data.dart';
+
+class editParameter {
+  final StudentData std;
+  editParameter(this.std);
+}
 
 class EditScreen extends StatefulWidget {
-  EditScreen({Key key, this.title}) : super(key: key);
-  final String title;
+  final StudentData std;
+  EditScreen({this.std});
   @override
   _EditScreenState createState() => _EditScreenState();
 }
@@ -14,7 +20,10 @@ class _EditScreenState extends State<EditScreen> {
   @override
   void initState() {
     controller = TextEditingController();
-    answer = "0";
+    if (widget.std != null) {
+      answer = widget.std.score.toString();
+    } else
+      answer = '0';
     super.initState();
   }
 
@@ -45,18 +54,22 @@ class _EditScreenState extends State<EditScreen> {
           children: <Widget>[
             Text("Name",
                 style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
-            Container(
-              width: 220,
-              child: TextField(
-                controller: controller,
-                decoration: InputDecoration(
-                  labelText: 'Enter the Value',
-                  errorText: _validate ? 'Value Can\'t Be Empty' : null,
-                ),
-              ),
-            )
+            Container(width: 220, child: printTextfeild())
           ],
         ));
+  }
+
+  Widget printTextfeild() {
+    if (widget.std != null) {
+      controller.text = widget.std.name;
+    }
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        //labelText: 'Enter the Value',
+        errorText: _validate ? 'Value Can\'t Be Empty' : null,
+      ),
+    );
   }
 
   Widget buildAnswerWidget() {
@@ -162,7 +175,7 @@ class _EditScreenState extends State<EditScreen> {
   }
 
   void _sendDataBack(BuildContext context) {
-    Navigator.pop(context, '${controller.text}-$answer');
+    Navigator.pop(context, '${controller.text}-$answer-');
   }
 
   void clearAnswer() {

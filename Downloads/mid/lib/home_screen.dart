@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _awaitReturnValueFromSecondScreen(context);
+          _awaitReturnValueFromEditScreen(context);
         },
         child: Icon(Icons.plus_one),
         backgroundColor: Colors.green,
@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _awaitReturnValueFromSecondScreen(BuildContext context) async {
+  void _awaitReturnValueFromEditScreen(BuildContext context) async {
     final result = await Navigator.push(
         context,
         MaterialPageRoute(
@@ -63,6 +63,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _awaitReturnValueFromShowScreen(BuildContext context,int index) async {
+    final result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ShowScreen(student: student,std: student[index],selectidx: index),
+        ));
+    if (result != null) {
+      List<String> x = result.split("-");
+      setState(() {
+        student[int.parse(x[2])] = StudentData (int.parse(x[2]), x[0], int.parse(x[1]));
+      });
+    }
+  }
+
   Widget buildRow(BuildContext context, int index) {
     return ListTile(
         leading: Text("${student[index].id} "),
@@ -71,9 +85,6 @@ class _HomeScreenState extends State<HomeScreen> {
           "${student[index].score}",
           style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
-        onTap: () => {
-              Navigator.of(context)
-                  .pushNamed(AppRoutes.show, arguments: ShowParameter(student,student[index]))
-            });
+        onTap: () => {_awaitReturnValueFromShowScreen(context,index)});
   }
 }
