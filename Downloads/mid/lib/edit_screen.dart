@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mid/student_data.dart';
 
-class editParameter {
+class EditParameter {
   final StudentData std;
-  editParameter(this.std);
+  EditParameter(this.std);
 }
 
 class EditScreen extends StatefulWidget {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mid/config/routes.dart';
 import 'package:mid/edit_screen.dart';
 import 'package:mid/show_screen.dart';
 import 'package:mid/student_data.dart';
@@ -72,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (result != null) {
       List<String> x = result.split("-");
       setState(() {
-        student[int.parse(x[2])] = StudentData (int.parse(x[2]), x[0], int.parse(x[1]));
+        student[int.parse(x[2])] = StudentData (int.parse(x[2])+1, x[0], int.parse(x[1]));
       });
     }
   }
