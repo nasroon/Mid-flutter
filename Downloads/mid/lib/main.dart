@@ -14,22 +14,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "navigator",
+      theme: ThemeData(
+        primaryColor: new Color(0xff985de3),
+      ),
       routes: {
         AppRoutes.home: (context) => HomeScreen(),
-        //AppRoutes.show: (context) => ShowScreen(),
+        AppRoutes.show: (context) => ShowScreen(),
         AppRoutes.edit: (context) => EditScreen()
       },
-      onGenerateRoute: _registerRWP,
+      //onGenerateRoute: _registerRWP,
     );
   }
 
-  Route _registerRWP(RouteSettings settings){
-    if(settings.name == AppRoutes.show){
-      return MaterialPageRoute(builder: (context){
-        ShowParameter param = settings.arguments;
-        return ShowScreen(student: param.student,std: param.std,selectidx: param.selectidx,);
-      });
-    }
-  }
-
+  // Route _registerRWP(RouteSettings settings){
+  //   if(settings.name == AppRoutes.show){
+  //     return MaterialPageRoute(builder: (context){
+  //       ShowParameter param = settings.arguments;
+  //       return ShowScreen(student: param.student,std: param.std,selectidx: param.selectidx,);
+  //     });
+  //   }
+  // }
 }
