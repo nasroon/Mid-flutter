@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mid/student_data.dart';
 
-class EditParameter {
-  final StudentData std;
-  EditParameter(this.std);
-}
-
 class EditScreen extends StatefulWidget {
   final StudentData std;
   EditScreen({this.std});
@@ -66,7 +61,6 @@ class _EditScreenState extends State<EditScreen> {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        //labelText: 'Enter the Value',
         errorText: _validate ? 'Value Can\'t Be Empty' : null,
       ),
     );

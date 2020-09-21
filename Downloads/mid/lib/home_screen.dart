@@ -45,11 +45,16 @@ class _HomeScreenState extends State<HomeScreen> {
           return buildRow(context, index);
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _awaitReturnValueFromEditScreen(context);
         },
-        child: Icon(Icons.plus_one),
+        child: Icon(
+          Icons.add,
+        ),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16.0))),
         backgroundColor: Colors.green,
       ),
       bottomNavigationBar: makeBottom,
@@ -64,17 +69,35 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.home, color: Colors.white),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.blur_on, color: Colors.white),
+            icon: Icon(Icons.view_list, color: Colors.white),
             onPressed: () {},
           ),
         ],
       ),
     ),
   );
+
+  void errorMessage() {
+    AlertDialog alerterror = AlertDialog(
+      title: Text('Error !!'),
+      content: const Text("Name can't empty"),
+      actions: [
+        FlatButton(
+          child: Text('Ok'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
+    );
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alerterror;
+      },
+    );
+  }
 
   void _awaitReturnValueFromEditScreen(BuildContext context) async {
     final result =
@@ -90,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _awaitReturnValueFromShowScreen(BuildContext context, int index) async {
     final result = await Navigator.push(
         context,
-        SlideTopRoute(
+        SlideLeftRoute(
             page: ShowScreen(
                 student: student, std: student[index], selectidx: index)));
     if (result != null) {
@@ -109,7 +132,6 @@ class _HomeScreenState extends State<HomeScreen> {
       List<String> x = result.split("-");
       setState(() {
         student[i] = StudentData(i, x[0], int.parse(x[1]));
-        print(result);
       });
     }
   }
@@ -148,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         // TODO: Delete the item from DB etc..
                         setState(() {
                           student.removeAt(i);
+                          idUpdate();
                         });
                         Navigator.of(context).pop();
                       },
@@ -161,6 +184,12 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
     );
+  }
+
+  void idUpdate() {
+    for (int i = 0; i < student.length; i++) {
+      student[i].id = i + 1;
+    }
   }
 
   Widget makeCard(int i) {
@@ -185,14 +214,14 @@ class _HomeScreenState extends State<HomeScreen> {
           "${student[i].name}",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(" ", style: TextStyle(color: Colors.white)),
+        //subtitle: Text(" ", style: TextStyle(color: Colors.white)),
         trailing: Container(
           child: Text(
             "${student[i].score}",
-            style: TextStyle(color: Colors.white,fontSize: 40, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
           ),
         ),
         onTap: () => {_awaitReturnValueFromShowScreen(context, i)});
   }
 }
- 

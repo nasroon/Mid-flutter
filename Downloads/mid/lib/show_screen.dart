@@ -70,7 +70,7 @@ class _ShowScreenState extends State<ShowScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
             ListTile(
-              leading: Text(widget.std.id.toString()),
+              leading: Text(widget.std.id.toString()), //////////////////////////////////////////////
               title: Text(widget.std.name),
               trailing: Text(
                 widget.std.score.toString(),
@@ -92,7 +92,7 @@ class _ShowScreenState extends State<ShowScreen> {
               ),
               ListTile(
                 leading: Text(
-                    widget.studentsorted[_nextPersonDataIdx].id.toString()),
+                    widget.studentsorted[_nextPersonDataIdx].id.toString()), /////////////////////////////////
                 title: Text(widget.studentsorted[_nextPersonDataIdx].name),
                 trailing: Text(
                   widget.studentsorted[_nextPersonDataIdx].score.toString(),
