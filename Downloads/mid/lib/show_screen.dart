@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mid/edit_screen.dart';
 import 'package:mid/home_screen.dart';
 import 'package:mid/student_data.dart';
+import 'package:mid/config/slide_route.dart';
 
 class ShowParameter {
   final List<StudentData> student;
@@ -52,12 +53,9 @@ class _ShowScreenState extends State<ShowScreen> {
 
   void _awaitReturnValueFromEditScreen(BuildContext context) async {
     final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EditScreen(std : widget.std),
-        ));
+        context, SlideLeftRoute(page: EditScreen(std: widget.std)));
     if (result != null) {
-      Navigator.pop(context, result+widget.selectidx.toString());
+      Navigator.pop(context, result + widget.selectidx.toString());
     }
   }
 
@@ -65,7 +63,7 @@ class _ShowScreenState extends State<ShowScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Show Screen"),
+        title: Text("Profile"),
       ),
       body: Container(
           child: Column(
@@ -104,5 +102,5 @@ class _ShowScreenState extends State<ShowScreen> {
             ]))
           ])),
     );
-  }  
+  }
 }

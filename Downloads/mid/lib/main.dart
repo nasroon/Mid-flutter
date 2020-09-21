@@ -14,9 +14,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "navigator",
-      theme: ThemeData(
-        primaryColor: new Color(0xff985de3),
-      ),
+      theme: new ThemeData(
+          primaryColor: Color.fromRGBO(58, 66, 86, 1.0), fontFamily: 'Raleway'),
       routes: {
         AppRoutes.home: (context) => HomeScreen(),
         AppRoutes.show: (context) => ShowScreen(),

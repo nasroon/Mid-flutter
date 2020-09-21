@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mid/edit_screen.dart';
 import 'package:mid/show_screen.dart';
 import 'package:mid/student_data.dart';
+import 'package:mid/config/slide_route.dart';
+import 'package:mid/slide_background.dart';
 
 List<StudentData> student = [
   StudentData(1, "JJ", 80),
@@ -29,10 +31,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
       appBar: AppBar(
+        elevation: 0.1,
+        backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
         title: Text("My List"),
       ),
       body: ListView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
         itemCount: student.length,
         itemBuilder: (BuildContext context, int index) {
           return buildRow(context, index);
@@ -45,15 +52,33 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(Icons.plus_one),
         backgroundColor: Colors.green,
       ),
+      bottomNavigationBar: makeBottom,
     );
   }
 
+  final makeBottom = Container(
+    height: 55.0,
+    child: BottomAppBar(
+      color: Color.fromRGBO(58, 66, 86, 1.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.home, color: Colors.white),
+            onPressed: () {},
+          ),
+          IconButton(
+            icon: Icon(Icons.blur_on, color: Colors.white),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    ),
+  );
+
   void _awaitReturnValueFromEditScreen(BuildContext context) async {
-    final result = await Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => EditScreen(),
-        ));
+    final result =
+        await Navigator.push(context, SlideLeftRoute(page: EditScreen()));
     if (result != null) {
       List<String> x = result.split("-");
       setState(() {
@@ -65,10 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
   void _awaitReturnValueFromShowScreen(BuildContext context, int index) async {
     final result = await Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => ShowScreen(
-              student: student, std: student[index], selectidx: index),
-        ));
+        SlideTopRoute(
+            page: ShowScreen(
+                student: student, std: student[index], selectidx: index)));
     if (result != null) {
       List<String> x = result.split("-");
       setState(() {
@@ -78,20 +102,16 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _awaitReturnValueFromEditScreen2(BuildContext context,int i) async{
+  void _awaitReturnValueFromEditScreen2(BuildContext context, int i) async {
     final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditScreen(std: student[i]),
-              ));
-          if (result != null) {
-            List<String> x = result.split("-");
-            setState(() {
-              student[i] =
-                  StudentData(i, x[0], int.parse(x[1]));
-              print(result);
-            });
-          }
+        context, SlideLeftRoute(page: EditScreen(std: student[i])));
+    if (result != null) {
+      List<String> x = result.split("-");
+      setState(() {
+        student[i] = StudentData(i, x[0], int.parse(x[1]));
+        print(result);
+      });
+    }
   }
 
   Widget buildRow(BuildContext context, int i) {
@@ -100,16 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: Key(item.name),
       background: slideLeftBackground(),
       secondaryBackground: slideRightBackground(),
-      child: ListTile(
-          leading: Text("${i + 1} "),
-          title: Text("${student[i].name}"),
-          trailing: Container(
-            child: Text(
-              "${student[i].score}",
-              style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-            ),
-          ),
-          onTap: () => {_awaitReturnValueFromShowScreen(context, i)}),
+      child: makeCard(i),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
           final bool res = await showDialog(
@@ -146,67 +157,42 @@ class _HomeScreenState extends State<HomeScreen> {
               });
           return res;
         } else {
-          _awaitReturnValueFromEditScreen2(context,i);
+          _awaitReturnValueFromEditScreen2(context, i);
         }
       },
     );
   }
 
-  Widget slideRightBackground() {
-    return Container(
-      color: Colors.green,
-      child: Align(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            SizedBox(
-              width: 20,
-            ),
-            Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
-            Text(
-              " Edit ",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.left,
-            ),
-          ],
-        ),
-        alignment: Alignment.centerLeft,
+  Widget makeCard(int i) {
+    return Card(
+      elevation: 8.0,
+      margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+      child: Container(
+        decoration: BoxDecoration(color: Color.fromRGBO(64, 75, 96, .9)),
+        child: buildList(i),
       ),
     );
   }
 
-  Widget slideLeftBackground() {
-    return Container(
-      color: Colors.red,
-      child: Align(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
-            Text(
-              " Delete",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.right,
-            ),
-            SizedBox(
-              width: 20,
-            ),
-          ],
+  Widget buildList(int i) {
+    return ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+        leading: Text(
+          "${i + 1} ",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-        alignment: Alignment.centerRight,
-      ),
-    );
+        title: Text(
+          "${student[i].name}",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text(" ", style: TextStyle(color: Colors.white)),
+        trailing: Container(
+          child: Text(
+            "${student[i].score}",
+            style: TextStyle(color: Colors.white,fontSize: 40, fontWeight: FontWeight.bold),
+          ),
+        ),
+        onTap: () => {_awaitReturnValueFromShowScreen(context, i)});
   }
 }
+ 
