@@ -25,13 +25,17 @@ class _EditScreenState extends State<EditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
+        centerTitle: true,
         title: Text("Edit Screen"),
       ),
       body: Container(
           child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           buildName(),
           buildAnswerWidget(),
@@ -43,12 +47,15 @@ class _EditScreenState extends State<EditScreen> {
 
   Widget buildName() {
     return Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(10.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Text("Name",
-                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 48,
+                    fontWeight: FontWeight.bold)),
             Container(width: 220, child: printTextfeild())
           ],
         ));
@@ -59,32 +66,39 @@ class _EditScreenState extends State<EditScreen> {
       controller.text = widget.std.name;
     }
     return TextField(
+      style: TextStyle(fontSize: 30,color: Colors.white),
       controller: controller,
       decoration: InputDecoration(
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.white),
+        ),
         errorText: _validate ? 'Value Can\'t Be Empty' : null,
       ),
     );
   }
 
   Widget buildAnswerWidget() {
-    return Expanded(
-        child: Container(
-            padding: EdgeInsets.all(8),
-            color: Color(0xffdbdbdb),
-            child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(answer,
-                          style: TextStyle(
-                              fontSize: 48, fontWeight: FontWeight.bold))
-                    ]))));
+    return Container(
+        margin: EdgeInsets.only(top: 80),
+        constraints:
+            BoxConstraints(minWidth: 100, maxWidth: 300), ////////////////
+        padding: EdgeInsets.all(8), //////////////////
+        color: Color(0xffdbdbdb),
+        child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(answer,
+                      style:
+                          TextStyle(fontSize: 48, fontWeight: FontWeight.bold))
+                ])));
   }
 
   Widget buildNumPadWidget() {
     return Container(
+        margin: EdgeInsets.only(top: 50), ///////////////////////////
         color: Color(0xffdbdbdb),
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -181,12 +195,14 @@ class _EditScreenState extends State<EditScreen> {
 
   void addNumberToAnswer(int number) {
     setState(() {
-      if (number == 0 && answer == "0") {
-        // Not do anything.
-      } else if (number != 0 && answer == "0") {
-        answer = number.toString();
-      } else {
-        answer += number.toString();
+      if (int.parse(answer) < 10) {
+        if (number == 0 && answer == "0") {
+          // Not do anything.
+        } else if (number != 0 && answer == "0") {
+          answer = number.toString();
+        } else {
+          answer += number.toString();
+        }
       }
     });
   }
@@ -196,8 +212,9 @@ class _EditScreenState extends State<EditScreen> {
     Widget widget;
     widget = Container(
         margin: EdgeInsets.all(1),
+        decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
         child: Material(
-            color: Colors.grey,
+            color: Colors.blueGrey,
             child: InkWell(
                 onTap: onTap,
                 splashColor: Colors.blue,

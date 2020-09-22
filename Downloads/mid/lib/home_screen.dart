@@ -1,3 +1,4 @@
+import 'package:auto_animated/auto_animated.dart';
 import 'package:flutter/material.dart';
 import 'package:mid/edit_screen.dart';
 import 'package:mid/show_screen.dart';
@@ -12,6 +13,14 @@ List<StudentData> student = [
   StudentData(4, "John", 60)
 ];
 
+final options = LiveOptions(
+  delay: Duration(seconds: 1),
+  showItemInterval: Duration(milliseconds: 500),
+  showItemDuration: Duration(milliseconds: 500),
+  visibleFraction: 0.05,
+  reAnimateOnVisibility: false,
+);
+
 class HomeParameter {
   final int id, score;
   final String name;
@@ -21,6 +30,7 @@ class HomeParameter {
 class HomeScreen extends StatefulWidget {
   final int id, score;
   final String name;
+
   HomeScreen({this.name, this.score, this.id});
 
   @override
@@ -36,14 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0.1,
         backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
         title: Text("My List"),
+        centerTitle: true,
       ),
-      body: ListView.builder(
+      body: LiveList.options(
+        options: options,
+        itemBuilder: buildAnimatedItem,
         scrollDirection: Axis.vertical,
-        shrinkWrap: true,
         itemCount: student.length,
-        itemBuilder: (BuildContext context, int index) {
-          return buildRow(context, index);
-        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -57,25 +66,27 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.all(Radius.circular(16.0))),
         backgroundColor: Colors.green,
       ),
-      bottomNavigationBar: makeBottom,
     );
   }
 
-  final makeBottom = Container(
-    height: 55.0,
-    child: BottomAppBar(
-      color: Color.fromRGBO(58, 66, 86, 1.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          IconButton(
-            icon: Icon(Icons.view_list, color: Colors.white),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    ),
-  );
+  Widget buildAnimatedItem(
+    BuildContext context,
+    int index,
+    Animation<double> animation,
+  ) =>
+      FadeTransition(
+        opacity: Tween<double>(
+          begin: 0,
+          end: 1,
+        ).animate(animation),
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: Offset(0, -0.1),
+            end: Offset.zero,
+          ).animate(animation),
+          child: buildRow(context, index),
+        ),
+      );
 
   void errorMessage() {
     AlertDialog alerterror = AlertDialog(
@@ -167,7 +178,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(color: Colors.red),
                       ),
                       onPressed: () {
-                        // TODO: Delete the item from DB etc..
                         setState(() {
                           student.removeAt(i);
                           idUpdate();
@@ -206,13 +216,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget buildList(int i) {
     return ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        leading: Text(
-          "${i + 1} ",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        leading: Container(
+          padding: EdgeInsets.only(right: 12.0),
+          decoration: new BoxDecoration(
+              border: new Border(
+                  right: new BorderSide(width: 1.0, color: Colors.white))),
+          child: Text(
+            "${i + 1} ",
+            style: TextStyle(
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+          ),
         ),
         title: Text(
           "${student[i].name}",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
         ),
         //subtitle: Text(" ", style: TextStyle(color: Colors.white)),
         trailing: Container(

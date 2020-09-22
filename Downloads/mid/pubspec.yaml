@@ -21,6 +21,8 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  slimy_card: ^1.0.4
+  auto_animated: ^2.1.0
   flutter:
     sdk: flutter
 
@@ -60,6 +62,12 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
+  fonts:
+    - family: Raleway
+      fonts:
+        - asset: fonts/Raleway-Regular.ttf
+        - asset: fonts/Raleway-Thin.ttf
+          style: normal
   # fonts:
   #   - family: Schyler
   #     fonts:
